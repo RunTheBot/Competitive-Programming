@@ -12,28 +12,28 @@ for i in range(0, h):
 def look(l, x, y):
     nx, ny = x + 1, y
     check(nx,ny,l)
-    print(1)
+    # print(1)
     nx, ny = x + 1, y + 1
     check(nx,ny,l)
-    print(2)
+    # print(2)
     nx, ny = x + 1, y - 1
     check(nx,ny,l)
-    print(3)
+    # print(3)
     nx, ny = x - 1, y + 1
     check(nx,ny,l)
-    print(4)
+    # print(4)
     nx, ny = x - 1, y - 1
     check(nx,ny,l)
-    print(5)
+    # print(5)
     nx, ny = x - 1, y
     check(nx,ny,l)
-    print(6)
+    # print(6)
     nx, ny = x, y + 1
     check(nx,ny,l)
-    print(7)
+    # print(7)
     nx, ny = x, y - 1
     check(nx,ny,l)
-    print(8)
+    # print(8)
 
 def check(x,y,l):
     try:
