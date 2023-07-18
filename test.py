@@ -1,2 +1,1 @@
-x = "1234"
-print(len(x))
+print(len(str(1987)))
