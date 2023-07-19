@@ -11,13 +11,8 @@ for i in range(int(input())):
                 carts.insert(0, cart)
         else:
             hasOne = True
-    # while carts and carts[0] != 1:
-    #     branch.insert(0, carts.pop(0))
-    #
-    # carts.pop(0)
 
     counter = 2
-    end = True
 
     while carts or branch:
         if carts and branch:
@@ -35,6 +30,7 @@ for i in range(int(input())):
                 counter += 1
             else:
                 end = False
+                print("N")
                 break
         else:
             if carts[0] == counter:
@@ -42,7 +38,5 @@ for i in range(int(input())):
                 counter += 1
             else:
                 branch.insert(0, carts.pop(0))
-    if end:
-        print("Y")
     else:
-        print("N")
+        print("Y")
