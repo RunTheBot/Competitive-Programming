@@ -3,11 +3,11 @@ enemies = []
 
 violations = 0
 
-for i in range(int(input())):
+for _ in range(int(input())):
     pairs.append(set(input().split(" ")))
     violations += 1
 
-for i in range(int(input())):
+for _ in range(int(input())):
     enemies.append(set(input().split(" ")))
 
 for i in range(int(input())):
