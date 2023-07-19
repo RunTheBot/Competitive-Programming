@@ -1,16 +1,22 @@
 for i in range(int(input())):
     carts = []
     branch = []
+    hasOne = False
     for n in range(int(input())):
-        carts.insert(0, int(input()))
-
-    while carts and carts[0] != 1:
-        branch.insert(0, carts.pop(0))
-
-    carts.pop(0)
+        cart = int(input())
+        if cart != 1:
+            if hasOne:
+                branch.append(cart)
+            else:
+                carts.insert(0, cart)
+        else:
+            hasOne = True
+    # while carts and carts[0] != 1:
+    #     branch.insert(0, carts.pop(0))
+    #
+    # carts.pop(0)
 
     counter = 2
-
     end = True
 
     while carts or branch:
