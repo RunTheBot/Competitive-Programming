@@ -1,9 +1,11 @@
-for i in range(int(input())):
+import sys
+
+for i in range(int(sys.stdin.readline())):
     carts = []
     branch = []
     hasOne = False
-    for n in range(int(input())):
-        cart = int(input())
+    for n in range(int(sys.stdin.readline())):
+        cart = int(sys.stdin.readline())
         if cart != 1:
             if hasOne:
                 branch.append(cart)
