@@ -10,7 +10,7 @@ for _ in range(int(input())):
 for _ in range(int(input())):
     enemies.append(set(input().split(" ")))
 
-for i in range(int(input())):
+for _ in range(int(input())):
     group = set(input().split(" "))
     for i in pairs:
         if i.issubset(group):
