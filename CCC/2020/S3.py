@@ -1,16 +1,20 @@
-def permutate(l):
-    for i, x in enumerate(l):
-        for y in l[i + 1:]:
-            yield x
+def permute(str):
+    permutations = []
+    for i in range(len(str)):
+        if str[i] in str[:i]:
+            continue
+        for permutation in permute(str[:i] + str[i+1:]):
+            permutations.append(str[i] + permutation)
+    return permutations
 
-permutations = list(map(lambda x: "".join(x), set(itertools.permutations(input()))))
 
+match = input()
 string = input()
 
 count = 0
 
-for permutation in permutations:
-    if string.count(permutation) > 0:
+for permutation in permute(match):
+    if string.find(permutation):
         count += 1
 
 print(count)
