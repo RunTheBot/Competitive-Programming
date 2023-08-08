@@ -1,3 +1,6 @@
+# TSS Club Fair 2017
+# Problem B
+
 import math
 
 nums = list(map(int, input().split()))
