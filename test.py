@@ -1,1 +1,1 @@
-print(sum([]))
+print(list(range(10)))
