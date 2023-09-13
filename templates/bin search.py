@@ -10,4 +10,4 @@ def search(sequence, number, lower=0, upper=None):
         else:
             return search(sequence, number, lower, middle)
 
-print(search([1, 2, 3, 4, 5], 3, 0, 4))
+print(search([1, 2, 3.5, 4, 4, 5], 3, 0, 4))
