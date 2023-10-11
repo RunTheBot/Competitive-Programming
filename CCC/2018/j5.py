@@ -12,9 +12,12 @@ def BFS(book, length):
 
     while len(queue) > 0:
         currentPage, moves = queue.pop(0)
-        if book[currentPage] == [0] and not ended:
-            ended = True
-            endMoves = moves
+        if book[currentPage] == [0]:
+            if not ended:
+                ended = True
+                endMoves = moves
+            if moves < endMoves:
+                endMoves = moves
         for nextPage in book[currentPage]:
             if not visited[nextPage-1]:
                 visited[nextPage-1] = True
