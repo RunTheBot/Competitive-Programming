@@ -31,7 +31,9 @@ length = int(input())
 book = [[]]
 
 for i in range(length):
-    option = list(map(int, input().split()))
+    size, *option = list(map(int, input().split()))
+    if not option:
+        option = [0]
     book.append(option)
 
 # for option in book:
