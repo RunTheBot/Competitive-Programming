@@ -1,5 +1,5 @@
 min = 1
-max = 10
+max = 2 * (10 ** 9)
 
 while True:
     guess = (min + max) >> 1

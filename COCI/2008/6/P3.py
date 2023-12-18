@@ -1,36 +1,23 @@
-# COCI '08 Contest 6 #3 Nered
-# DMOJ: https://dmoj.ca/problem/coci08c6p3
-# Approach: Prefix Sum Array
+def min_moves(surface_dim, num_cubes, cubes):
+    surface = [[0] * surface_dim[1] for _ in range(surface_dim[0])]
 
+    for r, c in cubes:
+        surface[r - 1][c - 1] += 1
 
-n, m = map(int, input().split())
-grid = [[0 for _ in range(n + 1)] for _ in range(n + 1)]
-PSA = [[0 for _ in range(n + 1)] for _ in range(n + 1)]
+    min_row = min([r - 1 for r, _ in cubes])
+    max_row = max([r - 1 for r, _ in cubes])
+    min_col = min([c - 1 for _, c in cubes])
+    max_col = max([c - 1 for _, c in cubes])
 
-# Input
-for _ in range(m):
-    r, c = map(int, input().split())
-    grid[r][c] = 1
+    moves = (max_row - min_row + 1) * (max_col - min_col + 1) - num_cubes
 
-# print(grid)
+    return moves
 
-# Prefix Sum Array
-for r in range(1, n + 1):
-    for c in range(1, n + 1):
-        PSA[r][c] = PSA[r][c - 1] + PSA[r - 1][c] - PSA[r - 1][c - 1] + grid[r][c]
+# Read input
+surface_dim = tuple(map(int, input().split()))
+num_cubes = surface_dim[1]
+cubes = [tuple(map(int, input().split())) for _ in range(num_cubes)]
 
-rectangles = []
-for i in range(1, n + 1):
-    for j in range(1, n + 1):
-        if i * j == m:
-            rectangles.append((i, j))
-
-areaMax = 0
-for h, w in rectangles:
-    for r1 in range(1, n + 1 - h + 1):
-        for c1 in range(1, n + 1 - w + 1):
-            r2, c2 = r1 + h - 1, c1 + w - 1
-            area = PSA[r2][c2] - PSA[r2][c1 - 1] - PSA[r1 - 1][c2] + PSA[r1 - 1][c1 - 1]
-            areaMax = max(areaMax, area)
-
-print(areaMax)
+# Calculate and print the result
+result = min_moves(surface_dim, num_cubes, cubes)
+print(result)

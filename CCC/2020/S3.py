@@ -1,3 +1,8 @@
+#2020 Canadian Computing Competition
+#Senior Division
+#Problem S3: Searching for Strings
+#DMOJ: https://dmoj.ca/problem/ccc20s3
+
 def permute(str):
     permutations = []
     for i in range(len(str)):
