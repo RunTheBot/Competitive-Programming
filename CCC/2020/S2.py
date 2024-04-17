@@ -22,7 +22,8 @@ For an additional 4 of the 15 available marks, all of the integers in the cells 
 For an additional 4 of the 15 available marks, M ≤ 200 and N ≤ 200 .
 """
 
-from collections import deque
+input = __import__('sys').stdin.readline
+
 
 def findFactors(num):
 
@@ -46,18 +47,26 @@ def BFS(start, end, maze):
     mazeSize = (len(maze), len(maze[0]))
     queue = [start]
     visited = [[False for i in range(mazeSize[1]+1)] for j in range(mazeSize[0]+1)]
+    duplicate = [False] * 1_000_001
+
+    startVal = maze[start[0]][start[1]]
+    # print(startVal)
+
+    visited[start[0]][start[1]] = True
+
+    duplicate[startVal] = True
 
     while len(queue) > 0:
-        current = queue.pop()
+        r, c = queue.pop()
 
-        currentVal = maze[current[0]][current[1]]
+        currentVal = maze[r][c]
 
         for factor in findFactors(currentVal):
             nextPossiblePos = (factor-1, (currentVal // factor)-1)
             if isInside(mazeSize, nextPossiblePos):
                 if nextPossiblePos == end:
                     return True
-                if not visited[nextPossiblePos[0]][nextPossiblePos[1]]:
+                if (not visited[r][c]) and (not duplicate[maze[r][c]]):
                     visited[nextPossiblePos[0]][nextPossiblePos[1]] = True
                     queue.append(nextPossiblePos)
 
