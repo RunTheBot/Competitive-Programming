@@ -39,34 +39,28 @@ def findFactors(num):
     return factors
 
 def isInside(mazeSize, pose):
-    return 1 <= pose[0] <= mazeSize[0] and 1 <= pose[1] <= mazeSize[1]
+    return 0 <= pose[0] < mazeSize[0] and 0 <= pose[1] < mazeSize[1]
 
 
 def BFS(start, end, maze):
-    mazeSize = end
-    queue = deque([start])
+    mazeSize = (len(maze), len(maze[0]))
+    queue = [start]
     visited = [[False for i in range(mazeSize[1]+1)] for j in range(mazeSize[0]+1)]
 
     while len(queue) > 0:
-        current = queue.popleft()
+        current = queue.pop()
 
         currentVal = maze[current[0]][current[1]]
 
-        nextPoses = []
-
-        test = findFactors(currentVal)
-
         for factor in findFactors(currentVal):
-            nextPossiblePos = (factor, currentVal // factor)
+            nextPossiblePos = (factor-1, (currentVal // factor)-1)
             if isInside(mazeSize, nextPossiblePos):
-                nextPoses.append(nextPossiblePos)
+                if nextPossiblePos == end:
+                    return True
+                if not visited[nextPossiblePos[0]][nextPossiblePos[1]]:
+                    visited[nextPossiblePos[0]][nextPossiblePos[1]] = True
+                    queue.append(nextPossiblePos)
 
-        for nextPose in nextPoses:
-            if current == end:
-                return True
-            if not visited[nextPose[0]][nextPose[1]]:
-                visited[nextPose[0]][nextPose[1]] = True
-                queue.append(nextPose)
     return False
 
 
@@ -74,14 +68,11 @@ M = int(input())
 N = int(input())
 maze = []
 
-# one row of -1 ro make maze 1-indexed
-maze.append([-1 for i in range(N + 1)])
-
 for i in range(M):
-    maze.append([-1] + list(map(int, input().split())))
+    maze.append(list(map(int, input().split())))
 
-start = (1, 1)
-end = (M, N)
+start = (0, 0)
+end = (M-1, N-1)
 
 if BFS(start, end, maze):
     print("yes")
