@@ -22,8 +22,7 @@ For an additional 4 of the 15 available marks, all of the integers in the cells 
 For an additional 4 of the 15 available marks, M ≤ 200 and N ≤ 200 .
 """
 
-input = __import__('sys').stdin.readline
-
+from collections import deque
 
 def findFactors(num):
 
@@ -31,11 +30,8 @@ def findFactors(num):
 
     for i in range(1, int(num ** 0.5) + 1):
         if num % i == 0:
-            if num // i == i:
-                factors.append(i)
-            else:
-                factors.append(i)
-                factors.append(num // i)
+            factors.append((i-1, (num // i)-1))
+            factors.append(((num // i)-1, i-1))
 
     return factors
 
@@ -57,18 +53,19 @@ def BFS(start, end, maze):
     duplicate[startVal] = True
 
     while len(queue) > 0:
-        r, c = queue.pop()
+        current = queue.pop()
 
-        currentVal = maze[r][c]
+        currentVal = maze[current[0]][current[1]]
 
-        for factor in findFactors(currentVal):
-            nextPossiblePos = (factor-1, (currentVal // factor)-1)
+        for pairs in findFactors(currentVal):
+            nextPossiblePos = pairs
             if isInside(mazeSize, nextPossiblePos):
                 if nextPossiblePos == end:
                     return True
-                if (not visited[r][c]) and (not duplicate[maze[r][c]]):
+                if (not visited[nextPossiblePos[0]][nextPossiblePos[1]]) and (not duplicate[maze[nextPossiblePos[0]][nextPossiblePos[1]]]):
                     visited[nextPossiblePos[0]][nextPossiblePos[1]] = True
                     queue.append(nextPossiblePos)
+                    duplicate[maze[nextPossiblePos[0]][nextPossiblePos[1]]] = True
 
     return False
 
@@ -87,4 +84,3 @@ if BFS(start, end, maze):
     print("yes")
 else:
     print("no")
-
