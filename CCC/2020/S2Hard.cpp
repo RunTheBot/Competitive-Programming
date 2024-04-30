@@ -8,8 +8,8 @@ const int MAX_M = 4001;
 const int MAX_N = 4001;
 const int MAX_VAL = MAX_M * MAX_N;
 
-bool visited[MAX_M + 1][MAX_N + 1];
-bool duplicate[MAX_VAL + 1];
+bool visited[MAX_M + 2][MAX_N + 2];
+bool duplicate[MAX_VAL + 2];
 
 bool isInside(pair<int, int> mazeSize, pair<int, int> pose) {
     return 0 <= pose.first && pose.first < mazeSize.first &&
@@ -18,7 +18,7 @@ bool isInside(pair<int, int> mazeSize, pair<int, int> pose) {
 
 vector<int> findFactors(int num) {
     vector<int> factors;
-    for (int i = 1; i <= sqrt(num); ++i) {
+    for (int i = 1; i <= (int)(sqrt(num)+0.1); ++i) {
         if (num % i == 0) {
             if (num / i == i) {
                 factors.push_back(i);
@@ -62,6 +62,9 @@ bool BFS(pair<int, int> start, pair<int, int> end, pair<int, int> mazeSize, vect
 }
 
 bool can_escape(int M, int N, vector<vector<int>> v) {
+    if (M == 1 && N == 1) {
+        return true;
+    }
     pair<int, int> mazeSize = make_pair(M, N);
 
     for (int i = 0; i < M + 1; ++i) {
@@ -80,13 +83,27 @@ bool can_escape(int M, int N, vector<vector<int>> v) {
     return BFS(start, end, mazeSize, v);
 }
 
-//int main() {
-//
-//    can_escape(3, 4, {{0, 0, 0, 0, 0},
-//                      {0, 3, 10, 8, 1},
-//                      {0, 1, 11, 12, 12},
-//                      {0, 6, 2, 3, 9}});
-//
-//
-//    return 0;
-//}
+int main() {
+    int M, N;
+    cin >> M >> N;
+    pair<int, int> mazeSize = make_pair(M, N);
+
+    vector<vector<int>> maze(M, vector<int>(N));
+
+    for (int i = 0; i < M; ++i) {
+        for (int j = 0; j < N; ++j) {
+            cin >> maze[i][j];
+        }
+    }
+
+    pair<int, int> start = make_pair(0, 0);
+    pair<int, int> end = make_pair(M - 1, N - 1);
+
+    if (can_escape(M, N, maze)) {
+        cout << "yes" << endl;
+    } else {
+        cout << "no" << endl;
+    }
+
+    return 0;
+}
