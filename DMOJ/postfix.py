@@ -1,30 +1,24 @@
-expression = input().replace("^", "**").split()
 
-while len(expression) > 1:
-    operator = expression[2]
-    if operator == '+':
-        expression[0] = float(expression[0]) + float(expression[1])
-        expression.pop(1)
-        expression.pop(1)
-    elif operator == '-':
-        expression[0] = float(expression[0]) - float(expression[1])
-        expression.pop(1)
-        expression.pop(1)
-    elif operator == '*':
-        expression[0] = float(expression[0]) * float(expression[1])
-        expression.pop(1)
-        expression.pop(1)
-    elif operator == '/':
-        expression[0] = float(expression[0]) / float(expression[1])
-        expression.pop(1)
-        expression.pop(1)
-    elif operator == '%':
-        expression[0] = float(expression[0]) % float(expression[1])
-        expression.pop(1)
-        expression.pop(1)
-    elif operator == '**':
-        expression[0] = float(expression[0]) ** float(expression[1])
-        expression.pop(1)
-        expression.pop(1)
+expression = input().split()
 
-print(expression[0])
+stack = []
+
+operations = {
+    '+': lambda a, b: a + b,
+    '-': lambda a, b: a - b,
+    '*': lambda a, b: a * b,
+    '/': lambda a, b: a / b,
+    '^': lambda a, b: a ** b,
+    '%': lambda a, b: a % b
+}
+
+for char in expression:
+    if char.isdigit():
+        # print("char", char)
+        stack.append(int(char))
+    else:
+        b = stack.pop()
+        a = stack.pop()
+        stack.append(operations[char](a, b))
+
+print(stack[0])
