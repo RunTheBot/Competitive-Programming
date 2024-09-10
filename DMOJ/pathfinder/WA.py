@@ -1,130 +1,70 @@
-# Pathfinder
-# DMOJ: https://www.dmoj.ca/problem/pathfind
-from enum import Enum
+from collections import deque
 
+def get_edge_type(x, y, n, m):
+    edge_type = set()
+    if x == 0:
+        edge_type.add((0, -1))  # North
+    if x == n - 1:
+        edge_type.add((0, 1))  # South
+    if y == 0:
+        edge_type.add((-1, 0))  # West
+    if y == m - 1:
+        edge_type.add((1, 0))  # East
+    return edge_type
 
-# Enum for north, south, east, west
-class Direction(Enum):
-    NORTH = 0
-    SOUTH = 1
-    EAST = 2
-    WEST = 3
-
-n, m, k = map(int, input().split())
-
-walls = set()
-visited = set()
-
-for i in range(k):
-    x, y = map(int, input().split())
-    x -= 1
-    y -= 1
-    walls.add((x, y))
-
-# find all the walls that are on the edge of the grid, edges are defined as the
-#  squares that are x = 0 or x = n-1 or y = 0 or y = m-1
-
-def getEdgeType(wall):
-    edgeType = set()
-    if wall[0] == 0:
-        edgeType.add(Direction.NORTH)
-    if wall[0] == n-1:
-        edgeType.add(Direction.SOUTH)
-    if wall[1] == 0:
-        edgeType.add(Direction.WEST)
-    if wall[1] == m-1:
-        edgeType.add(Direction.EAST)
-
-    return edgeType
-
-def getEndEdgeType(wall):
-    # if there will be a complete line blocking the top right to bottom left
-    #  The the bfs should end
-    # for example a wall stating at SOUTH can end at north or east bur not west(does not form a blocking line) or south (It cannot form a blocking line)
-    wallType = getEdgeType(wall)
-    endWallType = set()
-    if Direction.NORTH in wallType:
-        endWallType.add(Direction.WEST)
-        endWallType.add(Direction.SOUTH)
-    if Direction.SOUTH in wallType:
-        endWallType.add(Direction.EAST)
-        endWallType.add(Direction.NORTH)
-    if Direction.EAST in wallType:
-        endWallType.add(Direction.SOUTH)
-        endWallType.add(Direction.WEST)
-    if Direction.WEST in wallType:
-        endWallType.add(Direction.NORTH)
-        endWallType.add(Direction.EAST)
-    return endWallType
-
-
-edgeWalls = []
-for wall in walls:
-    if wall[0] == 0 or wall[0] == n-1 or wall[1] == 0 or wall[1] == m-1:
-        endEdgeType = getEndEdgeType(wall)
-        edgeWalls.append((wall, endEdgeType))
-
-        # print(f'found edge wall {wall} with end edge type {endEdgeType}')
-
-# print the grid by building a string
-grid = [["." for i in range(m)] for j in range(n)]
-def print_grid(grid):
-    for i in range(n):
-        for j in range(m):
-            if (i, j) in grid:
-                print("#", end="")
-                # grid[i][j] = "#"
-            else:
-                print(".", end="")
-        print()
-
-
-
-# print_grid(walls)
-
-def print_path(path):
-    print(path)
-    for i in range(n):
-        for j in range(m):
-            if (i, j) in path:
-                print("#", end="")
-            else:
-                print(".", end="")
-        print()
-
-def BFS(start, endEdgeType):
-    queue = [start]
+def bidirectional_bfs(start, end_edge_type, walls, n, m):
+    queue_start = deque([start])
+    queue_end = deque(end_edge_type)
+    visited_start = set([start])
+    visited_end = set(end_edge_type)
     directions = [(0, 1), (1, 0), (0, -1), (-1, 0), (1, 1), (-1, 1), (1, -1), (-1, -1)]
-    path = [start]
-    while queue:
-        current = queue.pop(0)
-        # if a different edge of the grid is reached, then we have found a path
-        path.append(current)
-        if not getEdgeType(current) == set() and getEdgeType(current).issubset(endEdgeType):
 
-            # print("Path:")
-            # print_path(path)
-            # print("current", current)
-            # print("edgeType", getEdgeType(current))
-            return True
-        visited.add(current)
+    while queue_start and queue_end:
+        current_start = queue_start.popleft()
         for direction in directions:
-            x, y = current
+            x, y = current_start
             x += direction[0]
             y += direction[1]
-            if (x, y) in walls and (x, y) not in visited:
-                queue.append((x, y))
+            if (x, y) in walls or (x, y) in visited_start:
+                continue
+            if (x, y) in visited_end:
+                return True
+            visited_start.add((x, y))
+            queue_start.append((x, y))
+
+        current_end = queue_end.popleft()
+        for direction in directions:
+            x, y = current_end
+            x += direction[0]
+            y += direction[1]
+            if (x, y) in walls or (x, y) in visited_end:
+                continue
+            if (x, y) in visited_start:
+                return True
+            visited_end.add((x, y))
+            queue_end.append((x, y))
+
     return False
 
-for wall, endEdgeType in edgeWalls:
-    if wall in visited:
-        continue
-    visited.add(wall)
-    # print("Checking if there is a path from", wall, "to", endEdgeType, "With Type", getEdgeType(wall))
-    # print the row
-    # print("Row", [wall[0]])
-    if BFS(wall, endEdgeType):
-        print("NO")
-        break
-else:
-    print("YES")
+n, m, k = map(int, input().split())
+walls = set((x - 1, y - 1) for x, y in [map(int, input().split()) for _ in range(k)])
+
+for i in range(1, n - 1):
+    for j in range(1, m - 1):
+        if (i, j) not in walls:
+            continue
+        edge_type = get_edge_type(i, j, n, m)
+        end_edge_type = set()
+        for direction in edge_type:
+            x, y = i, j
+            x += direction[0]
+            y += direction[1]
+            if (x, y) in walls:
+                continue
+            end_edge_type.add((x, y))
+        if end_edge_type:
+            if bidirectional_bfs((i, j), end_edge_type, walls, n, m):
+                print("NO")
+                exit()
+
+print("YES")
