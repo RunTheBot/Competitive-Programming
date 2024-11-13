@@ -1,0 +1,18 @@
+// .vscode/launch.json
+{
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "name": "Debug C++ with cl.exe",
+            "type": "cppvsdbg",
+            "request": "launch",
+            "program": "${fileDirname}\\output.exe",
+            "args": [],
+            "stopAtEntry": false,
+            "cwd": "${workspaceFolder}",
+            "environment": [],
+            "console": "internalConsole",
+            "preLaunchTask": "Build with cl.exe"
+        }
+    ]
+}
