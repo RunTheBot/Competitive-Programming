@@ -1,24 +1,24 @@
 class UnionFind:
-    def __init__(self, size):
-        self.parent = list(range(size))
-        self.rank = [0] * size
-    
+    def __init__(self, n):
+        self.parent = list(range(n))
+        self.rank = [1] * n
+
     def find(self, x):
         if self.parent[x] != x:
-            self.parent[x] = self.find(self.parent[x])
+            self.parent[x] = self.find(self.parent[x])  
         return self.parent[x]
-    
+
     def union(self, x, y):
-        px, py = self.find(x), self.find(y)
-        if px == py:
-            return
-        if self.rank[px] < self.rank[py]:
-            self.parent[px] = py
-        elif self.rank[px] > self.rank[py]:
-            self.parent[py] = px
-        else:
-            self.parent[py] = px
-            self.rank[px] += 1
+        rootX = self.find(x)
+        rootY = self.find(y)
+        if rootX != rootY:
+            if self.rank[rootX] > self.rank[rootY]:
+                self.parent[rootY] = rootX
+            elif self.rank[rootX] < self.rank[rootY]:
+                self.parent[rootX] = rootY
+            else:
+                self.parent[rootY] = rootX
+                self.rank[rootX] += 1
 
 def kruskal(edges, n):
     uf = UnionFind(n)
@@ -43,18 +43,18 @@ for i in range(M):
     costs = wd[1+ep:]
     
     for k in range(ep):
-        a, b = corners[k], corners[(k+1) % ep]
-        if a > b:
-            a, b = b, a
-        if (a, b) in fence:
-            x, co, outside = fence[(a, b)]
+        corner1, corner2 = corners[k], corners[(k+1) % ep]
+        if corner1 > corner2:
+            corner1, corner2 = corner2, corner1
+        if (corner1, corner2) in fence:
+            x, co, outside = fence[(corner1, corner2)]
             edges.append((costs[k], i, x))
-            fence[(a, b)] = (i, costs[k], False) 
+            fence[(corner1, corner2)] = (i, costs[k], False) 
         else:
-            fence[(a, b)] = (i, costs[k], True)  
+            fence[(corner1, corner2)] = (i, costs[k], True)  
 
 outside_edges = []
-for (a, b), (pen, cost, is_outside) in fence.items():
+for (corner1, corner2), (pen, cost, is_outside) in fence.items():
     if is_outside:
         outside_edges.append((cost, pen, M))
 
