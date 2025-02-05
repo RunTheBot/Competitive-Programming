@@ -13,39 +13,47 @@
 # CCO 2015 Problem 4 - Cars on Ice
 # DMOJ: https://dmoj.ca/problem/cco15p4
 
-from collections import deque
+# Read input
+N, M = map(int, input().split())
+parking_lot = [list(input()) for _ in range(N)]
 
-def bfs(lot, valid, start):
-    directions = {'S': (1, 0), 'N': (-1, 0), 'E': (0, 1), 'W': (0, -1)}
-    queue = deque([start])
+# Brute force solution
 
-    while queue:
-        r, c = queue.popleft()
-        print(f'({r},{c})')
-        lot[r][c] = '.'
-        valid.remove((r, c))
+# Find the cars
+cars = []
+for i in range(N):
+    for j in range(M):
+        if parking_lot[i][j] in "NSEW":
+            cars.append((i, j))
 
-        direction = lot[r][c]
-        dr, dc = directions[direction]
+order = []
 
-        nr, nc = r + dr, c + dc
-        while 0 <= nr < len(lot) and 0 <= nc < len(lot[0]) and lot[nr][nc] != '.':
-            queue.append((nr, nc))
-            nr += dr
-            nc += dc
+while cars:
+    # Find the car that can be pushed
+    for i in range(len(cars)):
+        x, y = cars[i]
+        direction = parking_lot[x][y]
+        dx, dy = 0, 0
+        if direction == "N":
+            dx = -1
+        elif direction == "S":
+            dx = 1
+        elif direction == "E":
+            dy = 1
+        elif direction == "W":
+            dy = -1
+        while 0 <= x + dx < N and 0 <= y + dy < M:
+            if parking_lot[x + dx][y + dy] in "NSEW":
+                break
+        else:
+            order.append((x, y))
+            cars.pop(i)
+            parking_lot[x][y] = "."
+            break
 
-def main():
-    n, m = map(int, input().split())
+        
 
-    lot = [list(input()) for _ in range(n)]
-    valid = {(i, j) for i in range(n) for j in range(m) if lot[i][j] != '.'}
-
-    while valid:
-        start = min(valid)
-        bfs(lot, valid, start)
-
-if __name__ == "__main__":
-    main()
-
-
+# Output the order
+for car in order:
+    print(car)
 
