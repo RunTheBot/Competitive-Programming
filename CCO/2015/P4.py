@@ -29,7 +29,6 @@ for i in range(N):
 order = []
 
 while cars:
-    # Find the car that can be pushed
     for i in range(len(cars)):
         x, y = cars[i]
         direction = parking_lot[x][y]
@@ -42,9 +41,13 @@ while cars:
             dy = 1
         elif direction == "W":
             dy = -1
-        while 0 <= x + dx < N and 0 <= y + dy < M:
-            if parking_lot[x + dx][y + dy] in "NSEW":
+
+        nx, ny = x + dx, y + dy
+        while 0 <= nx < N and 0 <= ny < M:
+            if parking_lot[nx][ny] in "NSEW":
                 break
+            nx += dx
+            ny += dy
         else:
             order.append((x, y))
             cars.pop(i)
@@ -55,5 +58,5 @@ while cars:
 
 # Output the order
 for car in order:
-    print(car)
+    print("("+",".join(map(str, car))+")")
 

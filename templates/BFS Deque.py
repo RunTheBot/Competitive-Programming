@@ -6,13 +6,17 @@ def BFS(start, end, maze):
     queue = deque([start])
     visited = [[False for i in range(mazeSize[1])] for j in range(mazeSize[0])]
 
+    if start == end:
+        return True
+
     while len(queue) > 0:
         current = queue.popleft()
         for direction in directions:
             if current == end:
                 return True
             nextPose = (current[0] + direction[0], current[1] + direction[1])
-            if maze[nextPose[0]][nextPose[1]] == 0 and not visited[nextPose[0]][nextPose[1]]:
-                visited[nextPose[0]][nextPose[1]] = True
-                queue.append(nextPose)
+            if 0 <= nextPose[0] < mazeSize[0] and 0 <= nextPose[1] < mazeSize[1]:
+                if maze[nextPose[0]][nextPose[1]] == 0 and not visited[nextPose[0]][nextPose[1]]:
+                    visited[nextPose[0]][nextPose[1]] = True
+                    queue.append(nextPose)
     return False
